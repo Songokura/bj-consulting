@@ -1,10 +1,7 @@
 /* ============================================================
    BJ CONSULTING - стили. Чёрно-бордовая палитра, левый край.
-   Сигнатура: «реестровая запись» - штрихкод из вертикальных штрихов
-   разной ширины. Штрихи-шторки (.bc i) лежат над фото полупрозрачной
-   решёткой - кадр читается всегда, по прогрессу --p штрихи сжимаются
-   и фото раскрывается целиком. Прогресс дают: герой --hp (интро + скролл),
-   фото-плиты --open, тома каталога - состояние details.
+   Сигнатура: «реестровая запись» - штрихкод. Живёт только фоновой
+   текстурой секций (.bcbg) и в мелкой графике; фото ничем не перекрыты.
    Плиты: .pw (обёртка) > .plate (sticky), прогресс в --enter/--exit/--stay.
    ============================================================ */
 :root{
@@ -15,7 +12,7 @@
   --fd:"Roboto Condensed","Segoe UI",Arial,sans-serif;
   --ft:"Onest","Segoe UI",Arial,sans-serif;
   --hh:64px;
-  --enter:0; --exit:0; --stay:0; --open:0; --hp:0;
+  --enter:0; --exit:0; --stay:0;
   --wa:#25D366;
 }
 *,*::before,*::after{box-sizing:border-box}
@@ -109,23 +106,13 @@ html.no-plate .plate::after{display:none}
 .lay img{width:100%;height:100%;object-fit:cover}
 .lay picture{display:block;width:100%;height:100%}
 
-/* ---------- штрихкод: шторки над фото ----------
-   Каждый штрих: --x левый край, --w ширина, --d порог (0..0.6), --o точка сжатия.
-   --k = насколько штрих уже сжат при текущем --p. */
-.bc{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden;--p:0}
-.bc i{position:absolute;top:-1px;bottom:-1px;left:var(--x);width:var(--w);background:var(--ink);opacity:.66;transform-origin:var(--o) 50%;--k:clamp(0,(var(--p) - var(--d)) / (1 - var(--d)),1);transform:scaleX(calc(1 - var(--k)));will-change:transform}
-.bc i.r{background:var(--bordo)}
-.bc i.r2{background:var(--wine)}
-.hero .bc{--p:var(--hp)}
-.ph .bc{--p:var(--open)}
-html.no-plate .bc{--p:1}
 /* тихие штрихи в каталожных секциях */
 .bcbg{position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.55;background:repeating-linear-gradient(90deg,rgba(241,237,232,.032) 0 2px,transparent 2px 9px),repeating-linear-gradient(90deg,rgba(241,237,232,.022) 0 1px,transparent 1px 23px),repeating-linear-gradient(90deg,rgba(168,40,63,.06) 0 3px,transparent 3px 71px);mask-image:linear-gradient(180deg,transparent,#000 18%,#000 82%,transparent);-webkit-mask-image:linear-gradient(180deg,transparent,#000 18%,#000 82%,transparent)}
 
 /* ---------- герой ---------- */
 .hero .lay-photo img{filter:saturate(.85) brightness(.92);transform:scale(calc(1.02 + .08 * var(--stay)));transform-origin:50% 55%}
-.hero .lay-shade{z-index:4;background:linear-gradient(180deg,rgba(11,10,12,.62) 0%,rgba(11,10,12,.08) 26%,rgba(11,10,12,.12) 52%,rgba(11,10,12,.88) 86%,rgba(11,10,12,.96) 100%)}
-@media(min-width:761px){.hero .lay-shade{background:linear-gradient(180deg,rgba(11,10,12,.55) 0%,rgba(11,10,12,.05) 24%,rgba(11,10,12,.08) 50%,rgba(11,10,12,.86) 88%,rgba(11,10,12,.95) 100%),linear-gradient(90deg,rgba(11,10,12,.55) 0%,rgba(11,10,12,.15) 45%,rgba(11,10,12,0) 75%)}}
+.hero .lay-shade{z-index:4;background:linear-gradient(180deg,rgba(11,10,12,.62) 0%,rgba(11,10,12,.10) 22%,rgba(11,10,12,.46) 44%,rgba(11,10,12,.80) 62%,rgba(11,10,12,.93) 86%,rgba(11,10,12,.97) 100%)}
+@media(min-width:761px){.hero .lay-shade{background:linear-gradient(180deg,rgba(11,10,12,.55) 0%,rgba(11,10,12,.05) 24%,rgba(11,10,12,.30) 52%,rgba(11,10,12,.72) 70%,rgba(11,10,12,.90) 88%,rgba(11,10,12,.96) 100%),linear-gradient(90deg,rgba(11,10,12,.62) 0%,rgba(11,10,12,.24) 45%,rgba(11,10,12,0) 78%)}}
 .hero-in{position:absolute;inset:var(--hh) 0 46px;z-index:6;display:flex;flex-direction:column;justify-content:flex-end;padding:0 0 clamp(34px,6.5svh,84px);width:min(1180px,100% - 40px);margin-inline:auto;left:0;right:0;gap:18px;color:#fff}
 .h1{display:grid;justify-items:start;color:#fff;line-height:.9;white-space:nowrap;width:100%}
 .h1 .l1{font-weight:900;font-size:clamp(56px,min(13.5vw,15svh),162px);letter-spacing:.005em}
@@ -145,15 +132,15 @@ html.no-plate .bc{--p:1}
   .hero .lay-photo img{object-position:42% 50%}
 }
 
-/* интро героя: текст поднимается, шторки печатают кадр (JS ведёт --hp) */
+/* интро героя: текст поднимается */
 .hero .txt > *{opacity:0;transform:translateY(22px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
 .hero.on .txt > *,html.no-intro .hero .txt > *{opacity:1;transform:none}
 .hero .txt > :nth-child(1){transition-delay:.4s}.hero .txt > :nth-child(2){transition-delay:.55s}.hero .txt > :nth-child(3){transition-delay:.7s}.hero .txt > :nth-child(4){transition-delay:.85s}
 html.no-intro .hero .txt > *{transition-delay:0s}
 
-/* ---------- фото-плиты: тот же штрихкод, прогресс --open ---------- */
+/* ---------- фото-плиты ---------- */
 .ph .lay-photo img{filter:saturate(.85);transform:scale(calc(1 + .1 * var(--exit)))}
-.lay-shade-b{z-index:4;background:linear-gradient(180deg,rgba(11,10,12,.5) 0%,rgba(11,10,12,.05) 30%,rgba(11,10,12,.2) 55%,rgba(11,10,12,.92) 100%)}
+.lay-shade-b{z-index:4;background:linear-gradient(180deg,rgba(11,10,12,.5) 0%,rgba(11,10,12,.05) 28%,rgba(11,10,12,.34) 52%,rgba(11,10,12,.74) 72%,rgba(11,10,12,.95) 100%)}
 .ph-in{position:absolute;inset:var(--hh) 0 0;z-index:6;display:flex;flex-direction:column;justify-content:flex-end;width:min(1180px,100% - 40px);margin-inline:auto;left:0;right:0;padding:0 0 clamp(40px,8svh,84px);gap:16px;color:#fff}
 .ph-in .h2{color:#fff}
 .ph-in .lead{width:min(820px,100%)}
@@ -171,7 +158,7 @@ html.no-intro .hero .txt > *{transition-delay:0s}
 .pw.on .txt > *{opacity:1;transform:none}
 .plate .txt > :nth-child(2){transition-delay:.08s}.plate .txt > :nth-child(3){transition-delay:.16s}.plate .txt > :nth-child(4){transition-delay:.24s}.plate .txt > :nth-child(5){transition-delay:.32s}
 html.no-plate .plate .txt > *{opacity:1;transform:none}
-html.no-plate .pw{--open:1;--enter:1;--stay:1;--hp:1}
+html.no-plate .pw{--enter:1;--stay:1}
 
 /* ---------- обычные секции ---------- */
 .sec{position:relative;padding:clamp(64px,10svh,110px) 0;scroll-margin-top:var(--hh);background:var(--ink)}
@@ -191,12 +178,6 @@ html.no-plate .pw{--open:1;--enter:1;--stay:1;--hp:1}
 .vthumb img{width:100%;height:100%;object-fit:cover;filter:saturate(.8);transition:transform .8s cubic-bezier(.2,.7,.2,1)}
 .vol[open] .vthumb img,.vol summary:hover .vthumb img{transform:scale(1.05)}
 /* штрихи тома: в покое - штрихкод, при наведении приоткрыт, раскрытый том - кадр целиком */
-.bc-s{--p:.8}
-.bc-s i{transition:transform .8s cubic-bezier(.2,.7,.2,1) calc(var(--d) * .5s);background:var(--ink2)}
-.bc-s i.r{background:var(--bordo)}
-.bc-s i.r2{background:var(--wine)}
-.vol summary:hover .bc-s{--p:.92}
-.vol[open] .bc-s{--p:1}
 .vhead{display:grid;gap:6px;min-width:0}
 .vdoc{font:700 10px/1 var(--fd);letter-spacing:.2em;text-transform:uppercase;color:var(--bordo2)}
 .vtitle{font:800 clamp(22px,2.6vw,36px)/1 var(--fd);text-transform:uppercase;letter-spacing:.005em;color:var(--paper)}
@@ -257,9 +238,6 @@ html.no-plate .pw{--open:1;--enter:1;--stay:1;--hp:1}
 @media(max-width:860px){.sgrid{grid-template-columns:1fr}}
 .sphoto{position:relative;aspect-ratio:4/3;border-radius:16px;overflow:hidden;background:var(--ink)}
 .sphoto img{width:100%;height:100%;object-fit:cover;filter:saturate(.75)}
-.sphoto .bc-s{--p:.75}
-.sphoto .bc-s i{background:var(--ink2);transition-duration:1.2s}
-.sphoto.in .bc-s{--p:1}
 .slist{display:grid;gap:10px}
 .step{display:flex;gap:16px;align-items:flex-start;padding:18px 18px 18px 16px;border-radius:14px;background:var(--ink);border:1px solid var(--line);position:relative;overflow:hidden}
 .step::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:2px;background:linear-gradient(90deg,var(--bordo2),transparent 70%);transform:scaleX(0);transform-origin:left;transition:transform 1s cubic-bezier(.2,.7,.2,1) .2s}

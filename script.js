@@ -205,49 +205,14 @@ function fillTicker(){
   el.innerHTML = html;
   el.style.setProperty("--tkw", w + "px");
 }
-var rsTimer, lastMob = innerWidth < 761;
+var rsTimer;
 addEventListener("resize", function(){
   clearTimeout(rsTimer);
   rsTimer = setTimeout(function(){
     fillTicker(); fitText();
-    var mob = innerWidth < 761;
-    if (mob !== lastMob) { lastMob = mob; buildAllBars(); }
   }, 200);
 });
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ fillTicker(); fitText(); });
-
-/* ---------------- ШТРИХКОД: сборка штрихов ----------------
-   Детерминированный генератор: у каждого блока свой узор, но он
-   не меняется от загрузки к загрузке. Ширины трёх сортов - тонкие,
-   средние, широкие - как у настоящего штрихкода. */
-function seedRnd(s){
-  return function(){ s = (s * 1664525 + 1013904223) % 4294967296; return s / 4294967296; };
-}
-function hash(str){ var h = 7; for (var i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) % 1000003; return h + 11; }
-function buildBars(el){
-  var mob = innerWidth < 761;
-  var small = el.classList.contains("bc-s");
-  var target = small ? (mob ? 10 : 13) : (mob ? 26 : 48);
-  var rnd = seedRnd(hash(el.dataset.bars || "x"));
-  var unit = 100 / target;                 /* средний шаг в % */
-  var x = 0, html = "", idx = 0;
-  while (x < 100) {
-    var t = rnd(), w;
-    if (t < .52) w = unit * (0.16 + rnd() * 0.24);        /* тонкий */
-    else if (t < .86) w = unit * (0.42 + rnd() * 0.4);    /* средний */
-    else w = unit * (0.9 + rnd() * 0.8);                  /* широкий */
-    var g = unit * (0.7 + rnd() * 1.1);                   /* щель */
-    var d = (rnd() * 0.6).toFixed(2);
-    var o = ["0%", "100%", "50%"][Math.floor(rnd() * 3)];
-    var c = rnd();
-    var cls = c < .06 ? ' class="r"' : (c < .12 ? ' class="r2"' : "");
-    html += "<i" + cls + ' style="--x:' + x.toFixed(2) + "%;--w:" + (w + 0.06).toFixed(2) + "%;--d:" + d + ";--o:" + o + '"></i>';
-    x += w + g; idx++;
-  }
-  el.innerHTML = html;
-}
-function buildAllBars(){ document.querySelectorAll(".bc").forEach(buildBars); }
-buildAllBars();
 
 /* ---------------- МЕНЮ ---------------- */
 var burger = document.getElementById("burger");
@@ -298,10 +263,9 @@ document.querySelectorAll(".vol").forEach(function(v){
   });
 });
 
-/* ---------------- ПЛИТЫ И ШТРИХКОД ----------------
+/* ---------------- ПЛИТЫ ----------------
    Один слушатель scroll через rAF. На каждую обёртку .pw пишем
-   --enter / --exit / --stay и --open (раскрытие штрихов фото-плит),
-   герою ещё --hp: доля интро плюс прокрутка. Дальше всё делает CSS. */
+   --enter / --exit / --stay. Дальше всё делает CSS. */
 var pws = [].slice.call(document.querySelectorAll(".pw"));
 var heroPw = document.getElementById("top");
 var hero = heroPw ? heroPw.querySelector(".hero") : null;
@@ -309,10 +273,7 @@ var regno = document.getElementById("regno");
 var REG_FINAL = regno ? regno.textContent : "";
 var bar = document.getElementById("bar");
 var kont = document.getElementById("kontakty");
-var introK = 1, introDone = true;
 function clamp(v){ return v < 0 ? 0 : (v > 1 ? 1 : v); }
-function easeOut(t){ return 1 - Math.pow(1 - t, 2.4); }
-function easeInOut(t){ return t < .5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 2) / 2; }
 var regSettled = true, regFrame = 0;
 function scrambleReg(stay){
   if (!regno) return;
@@ -339,14 +300,9 @@ function update(){
     pw.style.setProperty("--enter", enter.toFixed(3));
     pw.style.setProperty("--exit",  exit.toFixed(3));
     pw.style.setProperty("--stay",  stay.toFixed(3));
-    pw.style.setProperty("--open",  easeOut(clamp((enter - 0.08) / 0.5)).toFixed(3));
     pw.classList.toggle("gone", exit >= 1);
     pw.classList.toggle("on", enter > 0.62);
-    if (pw === heroPw) {
-      var hp = 0.55 * easeOut(introK) + 0.45 * easeInOut(clamp(stay * 1.25));
-      pw.style.setProperty("--hp", hp.toFixed(3));
-      if (!RED) scrambleReg(stay);
-    }
+    if (pw === heroPw && !RED) scrambleReg(stay);
   });
   if (bar) {
     var onKont = kont && kont.getBoundingClientRect().top < H * 0.6;
@@ -365,29 +321,12 @@ if (RED) {
   }, {passive:true});
   addEventListener("resize", update);
   addEventListener("load", update);
-  /* интро: шторки печатают кадр 1250 мс; пропускаем при хэше / прокрутке */
-  var skip = location.hash || scrollY > 80;
-  if (skip) {
-    root.classList.add("no-intro");
-    if (hero) hero.classList.add("on");
-    update();
-  } else {
-    introK = 0; introDone = false; update();
-    var t0 = null;
-    var step = function(ts){
-      if (introDone) return;
-      if (t0 === null) t0 = ts;
-      var p = clamp((ts - t0) / 1250);
-      introK = p;
-      update();
-      if (p < 1) requestAnimationFrame(step);
-      else { introDone = true; if (hero) hero.classList.add("on"); }
-    };
-    requestAnimationFrame(step);
-    setTimeout(function(){ if (hero) hero.classList.add("on"); }, 600);
-  }
+  /* текст героя проявляется сразу; при переходе по якорю - без задержек */
+  if (location.hash || scrollY > 80) root.classList.add("no-intro");
+  if (hero) hero.classList.add("on");
+  update();
 }
-window.plateSync = function(){ introDone = true; introK = 1; if (hero) hero.classList.add("on"); update(); };
+window.plateSync = function(){ if (hero) hero.classList.add("on"); update(); };
 
 /* прямой переход по якорю: открыть том и встать на место (интро уже пропущено) */
 function hashJump(){
