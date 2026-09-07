@@ -227,16 +227,16 @@ function hash(str){ var h = 7; for (var i = 0; i < str.length; i++) h = (h * 31 
 function buildBars(el){
   var mob = innerWidth < 761;
   var small = el.classList.contains("bc-s");
-  var target = small ? (mob ? 14 : 20) : (mob ? 26 : 48);
+  var target = small ? (mob ? 10 : 13) : (mob ? 26 : 48);
   var rnd = seedRnd(hash(el.dataset.bars || "x"));
   var unit = 100 / target;                 /* средний шаг в % */
   var x = 0, html = "", idx = 0;
   while (x < 100) {
     var t = rnd(), w;
-    if (t < .45) w = unit * (0.25 + rnd() * 0.35);        /* тонкий */
-    else if (t < .82) w = unit * (0.7 + rnd() * 0.6);     /* средний */
-    else w = unit * (1.5 + rnd() * 1.4);                  /* широкий */
-    var g = unit * (0.12 + rnd() * 0.5);                  /* щель */
+    if (t < .52) w = unit * (0.16 + rnd() * 0.24);        /* тонкий */
+    else if (t < .86) w = unit * (0.42 + rnd() * 0.4);    /* средний */
+    else w = unit * (0.9 + rnd() * 0.8);                  /* широкий */
+    var g = unit * (0.7 + rnd() * 1.1);                   /* щель */
     var d = (rnd() * 0.6).toFixed(2);
     var o = ["0%", "100%", "50%"][Math.floor(rnd() * 3)];
     var c = rnd();
@@ -339,11 +339,11 @@ function update(){
     pw.style.setProperty("--enter", enter.toFixed(3));
     pw.style.setProperty("--exit",  exit.toFixed(3));
     pw.style.setProperty("--stay",  stay.toFixed(3));
-    pw.style.setProperty("--open",  easeOut(clamp((enter - 0.3) / 0.62)).toFixed(3));
+    pw.style.setProperty("--open",  easeOut(clamp((enter - 0.08) / 0.5)).toFixed(3));
     pw.classList.toggle("gone", exit >= 1);
     pw.classList.toggle("on", enter > 0.62);
     if (pw === heroPw) {
-      var hp = 0.38 * easeOut(introK) + 0.62 * easeInOut(clamp(stay * 1.25));
+      var hp = 0.55 * easeOut(introK) + 0.45 * easeInOut(clamp(stay * 1.25));
       pw.style.setProperty("--hp", hp.toFixed(3));
       if (!RED) scrambleReg(stay);
     }

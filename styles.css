@@ -1,9 +1,9 @@
 /* ============================================================
    BJ CONSULTING - стили. Чёрно-бордовая палитра, левый край.
    Сигнатура: «реестровая запись» - штрихкод из вертикальных штрихов
-   разной ширины. Штрихи-шторки (.bc i) лежат над фото; в покое видны
-   только узкие щели кадра, по прогрессу --p штрихи сжимаются и кадр
-   собирается целиком. Прогресс дают: герой --hp (интро + скролл),
+   разной ширины. Штрихи-шторки (.bc i) лежат над фото полупрозрачной
+   решёткой - кадр читается всегда, по прогрессу --p штрихи сжимаются
+   и фото раскрывается целиком. Прогресс дают: герой --hp (интро + скролл),
    фото-плиты --open, тома каталога - состояние details.
    Плиты: .pw (обёртка) > .plate (sticky), прогресс в --enter/--exit/--stay.
    ============================================================ */
@@ -113,7 +113,7 @@ html.no-plate .plate::after{display:none}
    Каждый штрих: --x левый край, --w ширина, --d порог (0..0.6), --o точка сжатия.
    --k = насколько штрих уже сжат при текущем --p. */
 .bc{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden;--p:0}
-.bc i{position:absolute;top:-1px;bottom:-1px;left:var(--x);width:var(--w);background:var(--ink);transform-origin:var(--o) 50%;--k:clamp(0,(var(--p) - var(--d)) / (1 - var(--d)),1);transform:scaleX(calc(1 - var(--k)));will-change:transform}
+.bc i{position:absolute;top:-1px;bottom:-1px;left:var(--x);width:var(--w);background:var(--ink);opacity:.66;transform-origin:var(--o) 50%;--k:clamp(0,(var(--p) - var(--d)) / (1 - var(--d)),1);transform:scaleX(calc(1 - var(--k)));will-change:transform}
 .bc i.r{background:var(--bordo)}
 .bc i.r2{background:var(--wine)}
 .hero .bc{--p:var(--hp)}
@@ -191,11 +191,11 @@ html.no-plate .pw{--open:1;--enter:1;--stay:1;--hp:1}
 .vthumb img{width:100%;height:100%;object-fit:cover;filter:saturate(.8);transition:transform .8s cubic-bezier(.2,.7,.2,1)}
 .vol[open] .vthumb img,.vol summary:hover .vthumb img{transform:scale(1.05)}
 /* штрихи тома: в покое - штрихкод, при наведении приоткрыт, раскрытый том - кадр целиком */
-.bc-s{--p:.18}
+.bc-s{--p:.8}
 .bc-s i{transition:transform .8s cubic-bezier(.2,.7,.2,1) calc(var(--d) * .5s);background:var(--ink2)}
 .bc-s i.r{background:var(--bordo)}
 .bc-s i.r2{background:var(--wine)}
-.vol summary:hover .bc-s{--p:.55}
+.vol summary:hover .bc-s{--p:.92}
 .vol[open] .bc-s{--p:1}
 .vhead{display:grid;gap:6px;min-width:0}
 .vdoc{font:700 10px/1 var(--fd);letter-spacing:.2em;text-transform:uppercase;color:var(--bordo2)}
@@ -257,7 +257,7 @@ html.no-plate .pw{--open:1;--enter:1;--stay:1;--hp:1}
 @media(max-width:860px){.sgrid{grid-template-columns:1fr}}
 .sphoto{position:relative;aspect-ratio:4/3;border-radius:16px;overflow:hidden;background:var(--ink)}
 .sphoto img{width:100%;height:100%;object-fit:cover;filter:saturate(.75)}
-.sphoto .bc-s{--p:.12}
+.sphoto .bc-s{--p:.75}
 .sphoto .bc-s i{background:var(--ink2);transition-duration:1.2s}
 .sphoto.in .bc-s{--p:1}
 .slist{display:grid;gap:10px}
