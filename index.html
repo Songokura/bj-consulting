@@ -3,6 +3,35 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18444985077"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-18444985077');
+
+  /* Цели Google Ads: клик по телефону, отправка формы, контакт (WhatsApp) */
+  var AW_CONV = {
+    phone: 'AW-18444985077/_vJjCJPagPUcEPXFoNtE',
+    lead:  'AW-18444985077/D9HkCMTii_UcEPXFoNtE',
+    wa:    'AW-18444985077/VLIMCLPrgPUcEPXFoNtE'
+  };
+  function awConv(kind, url){
+    var sendTo = AW_CONV[kind];
+    if (!sendTo) return true;
+    var cb = function(){ if (typeof url !== 'undefined' && url) window.location = url; };
+    gtag('event', 'conversion', {
+      'send_to': sendTo,
+      'value': 1.0,
+      'currency': 'USD',
+      'event_callback': cb
+    });
+    return true;
+  }
+  window.awConv = awConv;
+</script>
+
 <title data-i="m.title">Сертификация продукции в Алматы: сертификат и декларация соответствия ТР ТС - BJ Consulting</title>
 <meta name="description" data-i-c="m.desc" content="BJ Consulting, Алматы: сопровождение в оформлении сертификата соответствия и декларации о соответствии по техрегламентам Таможенного союза. 20 регламентов ТР ТС, 5 стран ЕАЭС. Консультация и расчёт бесплатно, оплата 100% после согласования стоимости.">
 <meta name="theme-color" content="#0B0A0C">
@@ -28,7 +57,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700;800;900&family=Onest:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="assets/photo/hero.webp" media="(min-width:761px)" fetchpriority="high">
 <link rel="preload" as="image" href="assets/photo/hero-m.webp" media="(max-width:760px)" fetchpriority="high">
-<link rel="stylesheet" href="styles.css?v=20260909-1">
+<link rel="stylesheet" href="styles.css?v=20260912-1">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -590,6 +619,6 @@
   <a href="#" data-wa="hero">WhatsApp</a>
 </div>
 
-<script src="script.js?v=20260909-1"></script>
+<script src="script.js?v=20260912-1"></script>
 </body>
 </html>

@@ -366,8 +366,20 @@ if (form) form.addEventListener("submit", function(e){
     ? "Сәлеметсіз бе! BJ Consulting сайтынан өтінім.\nАты: " + name + "\nТелефон: " + phone + (msg ? "\nӨнім: " + msg : "")
     : "Здравствуйте! Заявка с сайта BJ Consulting.\nИмя: " + name + "\nТелефон: " + phone + (msg ? "\nПродукция: " + msg : ""));
   ok.hidden = false;
+  if (window.awConv) window.awConv("lead");
   window.open("https://wa.me/" + WA + "?text=" + encodeURIComponent(t), "_blank", "noopener");
 });
+
+/* ---------------- КОНВЕРСИИ GOOGLE ADS ---------------- */
+/* Клик по номеру телефона и по кнопкам WhatsApp - отдельные цели кабинета. */
+document.addEventListener("click", function(e){
+  if (!window.awConv) return;
+  var a = e.target.closest ? e.target.closest("a") : null;
+  if (!a) return;
+  var href = a.getAttribute("href") || "";
+  if (href.indexOf("tel:") === 0) { window.awConv("phone"); return; }
+  if (a.hasAttribute("data-wa") || href.indexOf("wa.me") > -1) { window.awConv("wa"); }
+}, true);
 
 /* ---------------- СТАРТ ---------------- */
 snapshot();
