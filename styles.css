@@ -314,3 +314,17 @@ html[lang="kk"] .vtitle{font-size:clamp(20px,2.3vw,32px)}
   .tk-in{animation:none}
   *{transition-duration:0s!important;animation-duration:0s!important}
 }
+
+/* ---------- окно проверки «не робот» (защита от ботов, script.js) ---------- */
+.shield{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(11,10,12,.78)}
+.shield.on{display:flex}
+body.shield-open{overflow:hidden}
+.shield-box{position:relative;width:min(420px,100%);background:var(--ink2);border:1px solid var(--line);border-radius:18px;padding:30px 24px 24px;display:grid;gap:14px;box-shadow:0 30px 80px -20px rgba(0,0,0,.8)}
+.shield-t{font:800 22px/1.1 var(--fd);text-transform:uppercase;color:var(--paper);padding-right:28px}
+.shield-p{color:var(--mist);font-size:15px;line-height:1.45}
+.shield-go{width:100%;white-space:normal;text-align:center;line-height:1.2;background:#1FA855;box-shadow:none}
+.shield-go:hover{background:#25C263}
+.shield-call{font:700 22px/1 var(--fd);color:var(--paper)}
+.shield-x{position:absolute;top:10px;right:10px;width:40px;height:40px;border:0;border-radius:50%;background:transparent;color:var(--mist);font-size:26px;line-height:1;cursor:pointer}
+.shield-x:hover{color:var(--paper);background:rgba(241,237,232,.08)}
+.shield [hidden]{display:none}

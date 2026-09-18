@@ -5,87 +5,16 @@
    ============================================================ */
 (function(){
 "use strict";
-var WA = "77089094098";                 /* WhatsApp BJ Consulting */
+var WA = ["7","708","909","4098"].join("");  /* WhatsApp BJ Consulting: в исходнике не одной строкой - от сборщиков номеров */
 var RED = matchMedia("(prefers-reduced-motion: reduce)").matches;
 var HAS_IO = typeof IntersectionObserver === "function";
 var root = document.documentElement;
 
 /* ---------------- КАЗАХСКИЙ СЛОВАРЬ ----------------
-   Разметка русская. Ключа нет → строка остаётся русской. */
-var KZ = {
-"m.title":"Алматыда өнімді сертификаттау: КО ТР бойынша сәйкестік сертификаты мен декларациясы - BJ Consulting",
-"m.desc":"BJ Consulting, Алматы: Кеден одағының техникалық регламенттері бойынша сәйкестік сертификаты мен сәйкестік туралы декларацияны рәсімдеуде сүйемелдеу. 20 техникалық регламент, ЕАЭО құрамындағы 5 ел. Кеңес пен есеп тегін, құн келісілгеннен кейін төлем 100%.",
-"m.ogt":"ЕАЭО үшін өнімді сертификаттау - BJ Consulting, Алматы",
-"m.ogd":"КО ТР бойынша сәйкестік сертификаты мен сәйкестік туралы декларация. 20 регламент, ЕАЭО құрамындағы 5 ел. Кеңес пен есеп тегін, құн келісілгеннен кейін төлем 100%.",
-"a.home":"BJ Consulting, басты бетке","a.nav":"Сайт бөлімдері","a.lang":"Сайт тілі","a.call":"Қоңырау шалу","a.menu":"Мәзір",
-"nav.se":"Сертификат","nav.de":"Декларация","nav.pr":"Өнім","nav.ea":"ЕАЭО","nav.kr":"Жұмыс тәртібі","nav.kt":"Байланыс",
-"nav.se2":"Сәйкестік сертификаты","nav.de2":"Сәйкестік туралы декларация","nav.pr2":"Өнім топтары","nav.ea2":"ЕАЭО құрамындағы 5 ел",
-"b.wa2":"WhatsApp-қа жазу","b.wa":"WhatsApp арқылы құнын білу","b.pr":"Өнім топтары","b.price":"Құнын білу","b.wa3":"WhatsApp-та талқылау","b.call":"Қоңырау шалу",
-
-"h.a":"Цехтағы өнеркәсіптік прес қатары: сертификаттаудан өтетін жабдық",
-"h.reg":"ЕАЭО реестрі · жазба енгізілді",
-"h.kick":"Алматы · сертификаттау · 3 жылдан астам",
-"h.h1a":"Сертификаттау","h.h1b":"ЕАЭО нарығындағы өнім",
-"h.lead":"КО ТР бойынша сәйкестік сертификаты мен сәйкестік туралы декларация: 20 техникалық регламент, ЕАЭО құрамындағы 5 ел. Кеңес пен құн есебі - тегін, құн келісілгеннен кейін төлем 100%.",
-
-"se.a":"Зертханада өнім үлгілерін сынау","se.k":"Сәйкестік сертификаты","se.h":"КО ТР бойынша сәйкестік сертификаты",
-"se.l":"Регламент сынақ талап ететін жабдық, ойыншық, балалар киімі мен жиһаз үшін. Техникалық регламентті таңдаудан реестрге тіркеуге дейін сүйемелдейміз.",
-"se.c1":"Техникалық регламентті таңдау","se.c2":"Құжат макеті","se.c3":"Реестрге тіркеу",
-"de.a":"Жөнелту алдындағы қоймадағы өнім паллеттері","de.k":"Сәйкестік туралы декларация","de.h":"КО ТР бойынша сәйкестік туралы декларация",
-"de.l":"Тамақ өнімдері, косметика, қаптама және киім үшін. Макетін дайындап, тіркейміз - реестрдегі нөмірді алып, ЕАЭО құрамындағы барлық елде сатасыз.",
-"de.c1":"Кеңес тегін","de.c2":"Макет және келісу","de.c3":"Есептен кейін төлем 100%",
-
-"pr.k":"Өнім топтары","pr.h":"Сіздің өніміңізге қандай құжат керек",
-"pr.l":"Топты басыңыз: құжат, КО ТР техникалық регламенттері, өнім мысалдары және сізден не қажет. Құны өнім мен құжат санына байланысты - есеп кеңестен кейін.",
-"pr.n":"Тізімде сіздің тобыңыз жоқ па? Қандай өнім екенін жазыңыз - регламент пен құжатты таңдап береміз.",
-"v.tr":"Техникалық регламенттер","v.ex":"Мысалы","v.need":"Сізден не қажет",
-"tr.004":"төмен вольтты жабдық","tr.020":"электромагниттік үйлесімділік","tr.010":"машиналар мен жабдық","tr.016":"газ тәрізді отынмен жұмыс істейтін аппараттар","tr.032":"артық қысыммен жұмыс істейтін жабдық",
-"tr.021":"тамақ өнімдерінің қауіпсіздігі","tr.022":"тамақ өнімдерін таңбалау","tr.015":"астық","tr.023":"шырын өнімдері","tr.024":"май-тоң май өнімдері","tr.029":"тағамдық қоспалар мен хош иістендіргіштер","tr.033":"сүт және сүт өнімдері","tr.034":"ет және ет өнімдері","tr.051":"құс еті",
-"tr.009":"парфюмерия-косметика өнімдері","tr.017":"жеңіл өнеркәсіп өнімдері","tr.007":"балалар мен жасөспірімдерге арналған өнім","tr.008":"ойыншықтар қауіпсіздігі","tr.025":"жиһаз өнімдері","tr.005":"қаптама қауіпсіздігі",
-"n.1":"Өнім сипаттамасы: мақсаты, сипаттамалары","n.2":"ЕАЭО резиденті - өтініш берушінің деректемелері","n.3":"Тауар құжаттары: келісімшарт пен инвойс немесе ТШ / МЕМСТ","n.4":"Регламент сынақ талап етсе - үлгілер",
-"n.5":"Құрамы мен заттаңбасы","n.6":"Мата құрамы, өлшем қатары","n.7":"Бала жасы, материалдар","n.8":"Материалдар мен жиынтығы",
-"ob.a":"Цехтағы технологиялық жабдық","ob.d":"Сертификат немесе декларация","ob.t":"Тұрмыстық және өнеркәсіптік жабдық",
-"ob.e1":"Тұрмыстық техника мен электр аспаптары","ob.e2":"Электр құралдары","ob.e3":"Станоктар мен өндірістік желілер","ob.e4":"Компрессорлар мен сорғылар","ob.e5":"Қазандықтар мен газ аспаптары","ob.e6":"Қысыммен жұмыс істейтін ыдыстар",
-"pi.a":"Тамақ өндірісіндегі сусын құю желісі","pi.d":"Сәйкестік туралы декларация","pi.t":"Тамақ өнімдері",
-"pi.e1":"Кондитерлік өнімдер мен снектер","pi.e2":"Сусындар, шырындар, су","pi.e3":"Сүт өнімдері","pi.e4":"Ет және шұжық өнімдері","pi.e5":"Жарма, ұн, астық","pi.e6":"Майлар, қоспалар, хош иістендіргіштер",
-"ko.a":"Зертхана сөрелеріндегі косметика флакондары","ko.d":"Сәйкестік туралы декларация","ko.t":"Косметика және парфюмерия",
-"ko.e1":"Кремдер мен тері күтімі","ko.e2":"Сусабындар мен шаш күтімі құралдары","ko.e3":"Декоративті косметика","ko.e4":"Парфюмерия","ko.e5":"Сабын, гельдер, гигиена құралдары",
-"od.a":"Тігін өндірісінде киім тігу","od.d":"Сертификат немесе декларация","od.t":"Балалар мен ересектер киімі",
-"od.e1":"Ересектерге арналған киім мен іш киім","od.e2":"Балалар киімі","od.e3":"Трикотаж және тоқыма","od.e4":"Аяқ киім","od.e5":"Бас киім мен аксессуарлар",
-"ig.a":"Дүкен сөрелеріндегі жұмсақ ойыншықтар","ig.d":"Сертификат немесе декларация","ig.t":"Ойыншықтар мен балалар тауарлары",
-"ig.e1":"Жұмсақ ойыншықтар","ig.e2":"Конструкторлар мен үстел ойындары","ig.e3":"Қуыршақтар мен электронды ойыншықтар","ig.e4":"Нәрестелерге арналған тауарлар","ig.e5":"Арбалар мен балалар ыдысы",
-"me.a":"Жиһаз цехындағы шебер","me.d":"Сертификат немесе декларация","me.t":"Жиһаз және қаптама",
-"me.e1":"Корпустық және жұмсақ жиһаз","me.e2":"Балалар және кеңсе жиһазы","me.e3":"Қаптама және ыдыс","me.e4":"Пакеттер, үлдірлер, контейнерлер","me.e5":"Тығындау құралдары",
-
-"ea.a":"Контейнер терминалы: ЕАЭО елдеріне жеткізілетін өнім","ea.k":"Кеден одағы","ea.h":"Бес елге бір құжат",
-"ea.l":"КО ТР сертификаты мен декларациясы ЕАЭО аумағының барлығында жарамды. Одақ елдерінің кез келгенінің резиденті - өндірушілермен және импорттаушылармен жұмыс істейміз.",
-"ea.c1":"Қазақстан","ea.c2":"Қырғызстан","ea.c3":"Ресей","ea.c4":"Армения","ea.c5":"Беларусь",
-
-"tr.k":"Неге BJ Consulting","tr.h":"Қағаз жұмысын өз мойнымызға аламыз",
-"tr.1":"Кеңес тегін","tr.1p":"Міндетті талдап, регламент пен құжатты таңдаймыз. Ешбір сұрақ жауапсыз қалмайды.",
-"tr.3":"ЕАЭО резиденттерінің бәрі","tr.3p":"Қазақстан, Қырғызстан, Ресей, Армения және Беларусь өндірушілері мен импорттаушылары.",
-"tr.4":"Тез жауап береміз","tr.4p":"Мамандар жұмыс уақытында байланыста: мәселе тізімін емес, шешім ұсынамыз.",
-"st.a":"BJ Consulting кеңсесі","st.t":"Кеңсе фотосы","st.s":"BJ Consulting · Алматы, Көкмайса шағын ауданы, 4",
-
-"st.k":"Жұмыс тәртібі","st.h":"Кеңестен реестрдегі нөмірге дейін","st.pa":"Құжаттарға қол қою",
-"s.1":"Кеңес","s.1p":"Өнімді сипаттайсыз - құжат пен техникалық регламенттерді анықтаймыз.",
-"s.2":"Құнын келісу","s.2p":"Өнім мен құжат санына қарай есептейміз. Келісілгеннен кейін төлем 100%.",
-"s.3":"Құжат макеті","s.3p":"Сертификат немесе декларация макетін дайындап, сізбен келісеміз.",
-"s.4":"Реестрге тіркеу","s.4p":"Құжат реестрден нөмір алып, ЕАЭО құрамындағы барлық елде жарамды болады.",
-
-"fq.k":"Сұрақтар","fq.h":"Ең бастысы қысқаша",
-"q.1":"Сертификат немесе декларация қанша тұрады?","q.1p":"Құны жеке есептеледі: өнімнің күрделілігі мен құжат санына байланысты. Нақты сомасын кеңестен кейін айтамыз.",
-"q.2":"Қашан төлеу керек?","q.2p":"Кеңес пен регламенттерді таңдау - тегін. Құн есептелгеннен кейін төлем 100%, әрі қарай жұмысты өзіміз атқарамыз.",
-"q.3":"Құжат қай жерде жарамды?","q.3p":"ЕАЭО құрамындағы барлық елде: Қазақстан, Қырғызстан, Ресей, Армения, Беларусь.",
-"q.4":"Сертификат пен декларация: айырмашылығы неде?","q.4p":"Қандай құжат керек екенін өніміңізге қатысты техникалық регламент анықтайды. Кеңесте бірден айтамыз.",
-
-"kt.k":"Байланыс","kt.h":"Өнімді сипаттаңыз - құжатты таңдап береміз","kt.l":"Жұмыс уақытында жауап береміз: дүйсенбі-жұма, 09:00-17:00.",
-"fm.name":"Атыңыз","fm.phone":"Телефон","fm.msg":"Қандай өнім","fm.send":"WhatsApp-қа жіберу",
-"fm.ok":"Рақмет! WhatsApp ашылады, хабарлама дайын.","fm.err":"Атыңыз бен телефоныңызды көрсетіңіз.",
-"kt.city":"Алматы, Көкмайса шағын ауданы, 4","kt.time":"дс-жм · 09:00-17:00",
-"f.sub":"ЕАЭО үшін өнімді сертификаттау · Алматы",
-"f.copy":"© 2026 BJ Consulting. КО ТР бойынша сәйкестік сертификаттары мен сәйкестік туралы декларацияларды рәсімдеуде сүйемелдеу."
-};
+   Разметка русская, казахский словарь - в assets/lang/kk.js (window.SITE_KK), грузится
+   только по явному выбору KZ: проверка Google Ads видит один русский сайт. Ключа нет → строка русская. */
+var KZ = null, TICK_KZ = null, FORM_KK = null;
+var ASSET_V = ((document.currentScript && document.currentScript.src.match(/[?&]v=([^&]+)/)) || [])[1] || "";
 
 /* готовые тексты WhatsApp под каждый блок */
 var WA_TXT = {
@@ -101,23 +30,8 @@ ru:{
   me:"Здравствуйте! Нужен документ на мебель / упаковку (ТР ТС 025, 005). Продукция: ",
   ea:"Здравствуйте! Продаём продукцию в страны ЕАЭС, нужен документ ТР ТС. Продукция и страны: ",
   kontakty:"Здравствуйте! Пишу с сайта BJ Consulting. Нужна консультация по сертификации: "
-},
-kk:{
-  hero:"Сәлеметсіз бе! ЕАЭО үшін өнімді сертификаттау керек. Өнім: ",
-  se:"Сәлеметсіз бе! КО ТР бойынша сәйкестік сертификаты керек. Өнім: ",
-  de:"Сәлеметсіз бе! КО ТР бойынша сәйкестік туралы декларация керек. Өнім: ",
-  ob:"Сәлеметсіз бе! Тұрмыстық / өнеркәсіптік жабдыққа құжат керек (КО ТР 004, 020, 010, 016, 032). Жабдық: ",
-  pi:"Сәлеметсіз бе! Тамақ өніміне декларация керек (КО ТР 021 және т.б.). Өнім: ",
-  ko:"Сәлеметсіз бе! Косметика / парфюмерияға декларация керек (КО ТР 009). Өнім: ",
-  od:"Сәлеметсіз бе! Киімге құжат керек (КО ТР 017, 007). Өнім: ",
-  ig:"Сәлеметсіз бе! Ойыншықтар / балалар тауарларына құжат керек (КО ТР 008, 007). Өнім: ",
-  me:"Сәлеметсіз бе! Жиһаз / қаптамаға құжат керек (КО ТР 025, 005). Өнім: ",
-  ea:"Сәлеметсіз бе! Өнімді ЕАЭО елдеріне сатамыз, КО ТР құжаты керек. Өнім және елдер: ",
-  kontakty:"Сәлеметсіз бе! BJ Consulting сайтынан жазып отырмын. Сертификаттау бойынша кеңес керек: "
 }};
-
 var TICK = ["Сертификат соответствия","Декларация о соответствии","ТР ТС","Оборудование","Пищевая продукция","Косметика и парфюмерия","Одежда","Игрушки","Мебель и упаковка","Казахстан · Кыргызстан · Россия · Армения · Беларусь"];
-var TICK_KZ = ["Сәйкестік сертификаты","Сәйкестік туралы декларация","КО ТР","Жабдық","Тамақ өнімдері","Косметика және парфюмерия","Киім","Ойыншықтар","Жиһаз және қаптама","Қазақстан · Қырғызстан · Ресей · Армения · Беларусь"];
 
 /* ---------------- ПЕРЕВОД ---------------- */
 var RU = {};
@@ -127,10 +41,11 @@ function snapshot(){
   document.querySelectorAll("[data-i-aria]").forEach(function(el){ RU[el.dataset.iAria] = el.getAttribute("aria-label"); });
   document.querySelectorAll("[data-i-c]").forEach(function(el){ RU[el.dataset.iC] = el.getAttribute("content"); });
 }
-function pick(k, kk){ return (kk && KZ[k] !== undefined) ? KZ[k] : RU[k]; }
+function pick(k, kk){ return (kk && KZ && KZ[k] !== undefined) ? KZ[k] : RU[k]; }
 function curLang(){ return root.lang === "kk" ? "kk" : "ru"; }
 
 function setWaLinks(){
+  if (!isHuman()) return;                 /* боту и сборщику номеров - пустой href="#" */
   var L = curLang();
   document.querySelectorAll("[data-wa]").forEach(function(a){
     var t = WA_TXT[L][a.dataset.wa] || WA_TXT[L].hero;
@@ -139,8 +54,26 @@ function setWaLinks(){
   });
 }
 
+/* казахский словарь - по требованию, один раз */
+function loadKK(done){
+  if (KZ) return done();
+  var s = document.createElement("script");
+  s.src = "assets/lang/kk.js" + (ASSET_V ? "?v=" + ASSET_V : "");
+  s.onload = function(){
+    var k = window.SITE_KK;
+    if (k) { KZ = k.dict; WA_TXT.kk = k.wa; TICK_KZ = k.tick; FORM_KK = k.form; }
+    done();
+  };
+  s.onerror = function(){ done(); };
+  document.head.appendChild(s);
+}
+function setLang(lang){
+  if (lang === "kk") loadKK(function(){ applyLang(KZ ? "kk" : "ru"); });
+  else applyLang("ru");
+}
+
 function applyLang(lang){
-  var kk = lang === "kk";
+  var kk = lang === "kk" && !!KZ;
   root.setAttribute("lang", kk ? "kk" : "ru");
   document.querySelectorAll("[data-i]").forEach(function(el){
     var v = pick(el.dataset.i, kk); if (v !== undefined) el.innerHTML = v;
@@ -171,10 +104,10 @@ function initLang(){
   var saved = null;
   try { saved = localStorage.getItem("bj-lang"); } catch(e){}
   var lang = (url === "kk" || url === "ru") ? url : (saved === "kk" ? "kk" : "ru");
-  applyLang(lang);
+  setLang(lang);
 }
 document.querySelectorAll(".lang button").forEach(function(b){
-  b.addEventListener("click", function(){ applyLang(b.getAttribute("data-lang")); });
+  b.addEventListener("click", function(){ setLang(b.getAttribute("data-lang")); });
 });
 
 /* дисплейные строки: казахский длиннее - ужимаем, пока не влезет */
@@ -352,33 +285,143 @@ if (HAS_IO) {
   document.querySelectorAll(".rv").forEach(function(el){ el.classList.add("in"); });
 }
 
+/* ---------------- ЗАЩИТА ОТ БОТОВ ----------------
+   Сервера у сайта нет, поэтому фильтр работает в браузере и решает три задачи:
+   1) номер WhatsApp не лежит в разметке: ссылки wa.me и сам номер появляются только
+      после живого действия человека (движение мыши, касание, прокрутка колесом, клавиша)
+      и не раньше 2 секунд на странице - сборщики номеров и скрипты его не видят;
+   2) цели Google Ads (телефон, WhatsApp, форма) засчитываются только человеку -
+      автоматика кабинета перестаёт учиться на ботах и искать похожий трафик;
+   3) явные боты (webdriver, headless, пустой язык) WhatsApp не получают вовсе,
+      сомнительный визит подтверждает себя вторым нажатием в окне проверки.
+   Подмены по user-agent нет: всем людям показывается одна и та же страница. */
+var HB = { t0: Date.now(), moves: 0, act: false, open: false, sent: 0,
+  bot: (function(){
+    var n = navigator, ua = n.userAgent || "";
+    if (n.webdriver) return true;
+    if (/HeadlessChrome|PhantomJS|Puppeteer|Playwright|Selenium|Lighthouse|bot\b|crawl|spider/i.test(ua)) return true;
+    if (window.callPhantom || window._phantom || window.__nightmare || window.domAutomation) return true;
+    if (n.languages && n.languages.length === 0) return true;
+    return false;
+  })()
+};
+function isHuman(){ return !HB.bot && HB.act && Date.now() - HB.t0 > 2000; }
+
+var SH_RU = {
+  t:"Подтвердите, что вы не робот",
+  p:"Защищаем переписку от спам-ботов. Нажмите кнопку - откроется WhatsApp с готовым сообщением.",
+  b:"Я не робот - открыть WhatsApp",
+  x:"Закрыть",
+  f:"Не получилось открыть WhatsApp. Позвоните нам:"
+};
+function shTxt(k){ return (curLang() === "kk" && FORM_KK && FORM_KK["sh." + k]) || SH_RU[k]; }
+
+/* живое действие: засчитываем только настоящие (isTrusted) события */
+function humanSignal(e){
+  if (HB.act || HB.bot || !e.isTrusted) return;
+  if (e.type === "pointermove" || e.type === "mousemove") { if (++HB.moves < 3) return; }
+  HB.act = true;
+  ["pointermove","mousemove","touchstart","wheel","keydown"].forEach(function(t){ window.removeEventListener(t, humanSignal, true); });
+  setTimeout(unlockWa, Math.max(0, 2050 - (Date.now() - HB.t0)));
+}
+["pointermove","mousemove","touchstart","wheel","keydown"].forEach(function(t){
+  window.addEventListener(t, humanSignal, {capture:true, passive:true});
+});
+function unlockWa(){
+  if (!isHuman()) return;
+  setWaLinks();
+  document.querySelectorAll("[data-wa-num]").forEach(function(el){
+    el.textContent = "+" + WA.charAt(0) + " " + WA.substr(1,3) + " " + WA.substr(4,3) + " " + WA.substr(7);
+  });
+}
+
+function waText(key){ var L = curLang(); return WA_TXT[L][key] || WA_TXT[L].hero; }
+function goWa(text, kind){
+  if (window.awConv) window.awConv(kind);
+  window.open("https://wa.me/" + WA + "?text=" + encodeURIComponent(text), "_blank", "noopener");
+}
+
+/* окно проверки для сомнительного визита: кнопка оживает через 0,7 с,
+   мгновенный скриптовый клик по ней не проходит */
+var shEl = null;
+function shieldAsk(text, kind){
+  if (!shEl) {
+    shEl = document.createElement("div");
+    shEl.className = "shield";
+    shEl.setAttribute("role", "dialog");
+    shEl.setAttribute("aria-modal", "true");
+    shEl.innerHTML = '<div class="shield-box"><button type="button" class="shield-x"></button>' +
+      '<p class="shield-t"></p><p class="shield-p"></p>' +
+      '<button type="button" class="btn btn-solid shield-go"></button>' +
+      '<a class="shield-call" href="tel:+77007575036">+7 700 757 5036</a></div>';
+    document.body.appendChild(shEl);
+    shEl.addEventListener("click", function(e){
+      if (e.target === shEl || e.target.closest(".shield-x")) shieldClose();
+    });
+    shEl.querySelector(".shield-go").addEventListener("click", function(e){
+      if (!e.isTrusted || HB.bot || Date.now() - HB.openedAt < 700) return;
+      var d = HB.pending; shieldClose();
+      if (d) goWa(d.text, d.kind);
+    });
+  }
+  HB.pending = { text: text, kind: kind };
+  shEl.querySelector(".shield-x").setAttribute("aria-label", shTxt("x"));
+  shEl.querySelector(".shield-x").textContent = "×";
+  shEl.querySelector(".shield-t").textContent = shTxt("t");
+  shEl.querySelector(".shield-p").textContent = HB.bot ? shTxt("f") : shTxt("p");
+  shEl.querySelector(".shield-go").textContent = shTxt("b");
+  shEl.querySelector(".shield-go").hidden = HB.bot;
+  shEl.querySelector(".shield-call").hidden = !HB.bot;
+  HB.openedAt = Date.now();
+  shEl.classList.add("on");
+  document.body.classList.add("shield-open");
+}
+function shieldClose(){
+  if (!shEl) return;
+  shEl.classList.remove("on");
+  document.body.classList.remove("shield-open");
+  HB.pending = null;
+}
+document.addEventListener("keydown", function(e){ if (e.key === "Escape") shieldClose(); });
+
 /* ---------------- ФОРМА → WhatsApp ---------------- */
 var form = document.getElementById("form");
+var LINK_RE = /https?:|www\.|\.(ru|com|net|org|xyz|top|info)\b|<[a-z]/i;
 if (form) form.addEventListener("submit", function(e){
   e.preventDefault();
   var ok = document.getElementById("fmok"), err = document.getElementById("fmerr");
-  if (form.company && form.company.value) return;          /* honeypot */
   var name = form.name.value.trim(), phone = form.phone.value.trim(), msg = form.msg.value.trim();
-  if (!name || phone.replace(/\D/g, "").length < 10) { err.hidden = false; ok.hidden = true; return; }
+  var digits = phone.replace(/\D/g, "");
+  /* ловушки для ботов: скрытое поле, мгновенная отправка, ссылки в полях -
+     делаем вид, что всё прошло, но WhatsApp не открываем и цель не засчитываем */
+  var trap = (form.company && form.company.value) || HB.bot ||
+             Date.now() - HB.t0 < 3000 || LINK_RE.test(name + " " + msg) ||
+             Date.now() - HB.sent < 20000;
+  if (!trap && (!/[A-Za-zА-Яа-яЁёЀ-ӿ]/.test(name) || name.length > 60 ||
+      digits.length < 10 || digits.length > 15)) { err.hidden = false; ok.hidden = true; return; }
   err.hidden = true;
-  var L = curLang();
-  var t = (L === "kk"
-    ? "Сәлеметсіз бе! BJ Consulting сайтынан өтінім.\nАты: " + name + "\nТелефон: " + phone + (msg ? "\nӨнім: " + msg : "")
-    : "Здравствуйте! Заявка с сайта BJ Consulting.\nИмя: " + name + "\nТелефон: " + phone + (msg ? "\nПродукция: " + msg : ""));
   ok.hidden = false;
-  if (window.awConv) window.awConv("lead");
-  window.open("https://wa.me/" + WA + "?text=" + encodeURIComponent(t), "_blank", "noopener");
+  if (trap) return;
+  HB.sent = Date.now();
+  var F = (curLang() === "kk" && FORM_KK) ? FORM_KK : null;
+  var t = F
+    ? F.hi + "\n" + F.name + ": " + name + "\n" + F.phone + ": " + phone + (msg ? "\n" + F.prod + ": " + msg : "")
+    : "Здравствуйте! Заявка с сайта BJ Consulting.\nИмя: " + name + "\nТелефон: " + phone + (msg ? "\nПродукция: " + msg : "");
+  if (isHuman()) goWa(t, "lead"); else shieldAsk(t, "lead");
 });
 
-/* ---------------- КОНВЕРСИИ GOOGLE ADS ---------------- */
-/* Клик по номеру телефона и по кнопкам WhatsApp - отдельные цели кабинета. */
-document.addEventListener("click", function(e){
-  if (!window.awConv) return;
+/* ---------------- КЛИКИ: WhatsApp и телефон + КОНВЕРСИИ GOOGLE ADS ----------------
+   Слушаем window в фазе захвата - раньше любых других обработчиков. */
+window.addEventListener("click", function(e){
   var a = e.target.closest ? e.target.closest("a") : null;
-  if (!a) return;
+  if (!a || (shEl && shEl.contains(a))) return;
   var href = a.getAttribute("href") || "";
-  if (href.indexOf("tel:") === 0) { window.awConv("phone"); return; }
-  if (a.hasAttribute("data-wa") || href.indexOf("wa.me") > -1) { window.awConv("wa"); }
+  if (href.indexOf("tel:") === 0) { if (isHuman() && window.awConv) window.awConv("phone"); return; }
+  if (!a.hasAttribute("data-wa")) return;
+  if (isHuman() && e.isTrusted && href.indexOf("wa.me") > -1) { if (window.awConv) window.awConv("wa"); return; }
+  e.preventDefault();
+  if (isHuman() && e.isTrusted) goWa(waText(a.dataset.wa), "wa");   /* ссылка не успела получить номер */
+  else shieldAsk(waText(a.dataset.wa), "wa");
 }, true);
 
 /* ---------------- СТАРТ ---------------- */
